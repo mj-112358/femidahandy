@@ -1,0 +1,37 @@
+---
+const links = [
+  { href: '#mindmap', label: 'Research' },
+  { href: '#ideas', label: 'Ideas' },
+  { href: '#map', label: 'Places' },
+  { href: '#shelf', label: 'Books' },
+  { href: '#publications', label: 'Publications' },
+];
+---
+
+<nav id="site-nav" aria-label="Primary navigation">
+  <div class="nav-inner wrap">
+    <a href="#hero" class="nav-brand font-display">Femida Handy</a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">
+      <span>Menu</span><i aria-hidden="true"></i>
+    </button>
+    <ul id="nav-links" class="nav-links">
+      {links.map((link) => <li><a href={link.href} data-navlink>{link.label}</a></li>)}
+      <li><a class="nav-cv" href="/assets/femida-handy-cv.pdf" target="_blank" rel="noopener">CV</a></li>
+    </ul>
+  </div>
+  <div id="scroll-progress" aria-hidden="true"></div>
+</nav>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
+  const list = document.getElementById('nav-links');
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+    list?.classList.toggle('is-open', !open);
+  });
+  list?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => {
+    toggle?.setAttribute('aria-expanded', 'false');
+    list.classList.remove('is-open');
+  }));
+</script>

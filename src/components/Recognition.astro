@@ -1,0 +1,33 @@
+---
+import { recognition } from '../lib/content';
+---
+
+<section id="recognition" class="section recognition" aria-labelledby="recognition-title">
+  <div class="wrap">
+    <div class="section-index reveal">
+      <span>08</span><i aria-hidden="true"></i><span>Recognition</span>
+    </div>
+    <div class="recognition-heading" data-reveal-group>
+      <p class="eyebrow reveal">Awards and service</p>
+      <h2 id="recognition-title" class="t-section font-display reveal">Selected recognition and editorial leadership.</h2>
+    </div>
+
+    <article class="editor-role reveal">
+      <span>2010 to 2016</span>
+      <div>
+        <h3 class="font-display">Editor-in-Chief</h3>
+        <p><cite>Nonprofit and Voluntary Sector Quarterly</cite></p>
+      </div>
+    </article>
+
+    <ul class="recognition-list" data-reveal-group>
+      {recognition.map((item) => (
+        <li class="reveal">
+          <span class="font-display">{item.year}</span>
+          <strong>{item.honor}</strong>
+          <p>{item.work}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

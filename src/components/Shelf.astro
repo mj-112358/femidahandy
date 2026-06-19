@@ -1,0 +1,81 @@
+---
+import { books } from '../lib/content';
+---
+
+<section id="shelf" class="section shelf" aria-labelledby="shelf-title">
+  <div class="wrap">
+    <div class="section-index reveal">
+      <span>07</span><i aria-hidden="true"></i><span>The shelf</span>
+    </div>
+    <div class="shelf-heading" data-reveal-group>
+      <div>
+        <p class="eyebrow reveal">Books, 2002 to 2022</p>
+        <h2 id="shelf-title" class="t-section font-display reveal">Nine books, viewed as one body of work.</h2>
+      </div>
+      <p class="reveal">The shelf is chronological. Select a volume for a concise description based on the CV.</p>
+    </div>
+
+    <div class="book-shelf reveal" data-shelf>
+      <div class="shelf-scroll">
+        <div class="book-row" role="list">
+          {books.map((book, index) => (
+            <button
+              class="book"
+              role="listitem"
+              style={`--book-color:${book.color};--book-w:${(index % 3) * 0.4};--book-h:${(index % 4) * 0.9}`}
+              data-book={index}
+              data-title={book.title}
+              data-year={book.year}
+              data-note={book.note}
+              aria-pressed="false"
+            >
+              <span class="book-object" aria-hidden="true">
+                <span class="book-spine"></span>
+                <span class="book-pages"></span>
+                <span class="book-cover">
+                  <small>{book.year}</small>
+                  <strong class="font-display">{book.title}</strong>
+                </span>
+              </span>
+              <span class="sr-only">{book.title}, {book.year}</span>
+            </button>
+          ))}
+        </div>
+        <div class="shelf-board" aria-hidden="true"></div>
+      </div>
+
+      <aside class="shelf-detail" data-shelf-detail aria-live="polite">
+        <p class="shelf-detail-year font-display" data-detail-year>{books[0].year}</p>
+        <h3 class="font-display" data-detail-title>{books[0].title}</h3>
+        <p data-detail-note>{books[0].note}</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<script>
+  const shelf = document.querySelector<HTMLElement>('[data-shelf]');
+  if (shelf) {
+    const books = Array.from(shelf.querySelectorAll<HTMLButtonElement>('.book'));
+    const detail = shelf.querySelector<HTMLElement>('[data-shelf-detail]');
+    const yearEl = shelf.querySelector<HTMLElement>('[data-detail-year]');
+    const titleEl = shelf.querySelector<HTMLElement>('[data-detail-title]');
+    const noteEl = shelf.querySelector<HTMLElement>('[data-detail-note]');
+
+    const select = (book: HTMLButtonElement) => {
+      books.forEach((b) => {
+        const on = b === book;
+        b.classList.toggle('is-selected', on);
+        b.setAttribute('aria-pressed', String(on));
+      });
+      if (yearEl) yearEl.textContent = book.dataset.year ?? '';
+      if (titleEl) titleEl.textContent = book.dataset.title ?? '';
+      if (noteEl) noteEl.textContent = book.dataset.note ?? '';
+      detail?.classList.add('is-active');
+    };
+
+    books.forEach((book) => {
+      book.addEventListener('click', () => select(book));
+    });
+  }
+</script>

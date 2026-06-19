@@ -1,0 +1,42 @@
+---
+import { stats } from '../lib/content';
+import RadialMotif from './RadialMotif.astro';
+---
+
+<section id="question" class="section question" aria-labelledby="question-title">
+  <div class="wrap">
+    <div class="section-index reveal">
+      <span>01</span>
+      <i aria-hidden="true"></i>
+      <span>The question</span>
+    </div>
+
+    <div class="question-layout">
+      <div data-reveal-group>
+        <p class="eyebrow reveal">Measuring generosity</p>
+        <h2 id="question-title" class="t-section font-display reveal">Can generosity be studied as economic behavior?</h2>
+      </div>
+      <div class="question-copy" data-reveal-group>
+        <p class="reveal">
+          Femida Handy trained as an economist and applied microeconomics, validated measurement, and comparative data to philanthropy and volunteering.
+        </p>
+        <p class="reveal">
+          The work asks how trust, incentives, institutions, culture, and individual motives shape giving. It also examines what nonprofit organizations contribute and how civic participation relates to wellbeing.
+        </p>
+      </div>
+    </div>
+
+    <div class="question-paths" aria-hidden="true"><RadialMotif variant="network" /></div>
+
+    <div class="stats" data-reveal-group>
+      {stats.map((stat) => (
+        <div class="stat reveal">
+          <span class="stat-value font-display" data-count={stat.value} data-suffix={stat.suffix ?? ''}>
+            {stat.value}{stat.suffix ?? ''}
+          </span>
+          <span class="stat-label">{stat.label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

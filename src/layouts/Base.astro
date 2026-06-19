@@ -1,0 +1,101 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Dial from '../components/Dial.astro';
+import frauncesFont from '@fontsource-variable/fraunces/files/fraunces-latin-wght-normal.woff2?url';
+import interFont from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Femida Handy | Philanthropy, Volunteering, and Nonprofit Research',
+  description = 'Research on philanthropy, volunteering, nonprofit organizations, civic participation, and giving across institutions and countries.',
+} = Astro.props;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Femida Handy',
+  jobTitle: 'Professor, School of Social Policy & Practice',
+  affiliation: {
+    '@type': 'CollegeOrUniversity',
+    name: 'University of Pennsylvania',
+  },
+  worksFor: {
+    '@type': 'Organization',
+    name: 'University of Pennsylvania, School of Social Policy & Practice',
+  },
+  email: 'mailto:fhandy@upenn.edu',
+  url: 'https://sp2.upenn.edu/person/femida-handy/',
+  identifier: 'https://orcid.org/0000-0003-3200-8042',
+  sameAs: ['https://orcid.org/0000-0003-3200-8042'],
+  knowsAbout: [
+    'Philanthropy',
+    'Volunteering',
+    'Nonprofit economics',
+    'Corporate social responsibility',
+    'Generosity and wellbeing',
+  ],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" href={frauncesFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={interFont} as="font" type="font/woff2" crossorigin />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/og.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <meta name="theme-color" content="#011f5b" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script is:inline>
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.style.setProperty('--hero-progress', '0');
+      }
+    </script>
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <Dial />
+    <Nav />
+    <main id="main">
+      <slot />
+    </main>
+    <script>
+      import '../scripts/site.ts';
+    </script>
+    <style>
+      .skip-link {
+        position: fixed;
+        top: -100px;
+        left: 1rem;
+        z-index: 100;
+        background: var(--color-penn-blue);
+        color: #fff;
+        padding: 0.6rem 1rem;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        transition: top 200ms var(--ease-calm);
+      }
+      .skip-link:focus {
+        top: 1rem;
+      }
+    </style>
+  </body>
+</html>

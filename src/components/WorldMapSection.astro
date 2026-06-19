@@ -1,0 +1,103 @@
+---
+import WorldMap from './WorldMap.tsx';
+---
+
+<section id="map" class="section wm-section" aria-labelledby="wm-title">
+  <div class="wrap">
+    <div class="section-rule reveal" aria-hidden="true"></div>
+    <div class="wm-head" data-reveal-group>
+      <p class="eyebrow reveal">04 · Around the world</p>
+      <h2 id="wm-title" class="t-section font-display reveal">Context changes how people give.</h2>
+      <p class="wm-intro reveal measure-wide">
+        Comparative research across more than a dozen countries examines how institutions,
+        culture, and history shape giving and volunteering. India is a sustained focus,
+        including <em>seva</em> and <em>daan</em>, women-led NGOs, self-help groups,
+        microfinance, and community enterprise.
+      </p>
+    </div>
+
+    <div class="wm-island reveal">
+      <WorldMap client:visible />
+    </div>
+
+    <p class="wm-caption reveal">
+      <span class="wm-key wm-key-blue"></span> Countries in her empirical work
+      <span class="wm-key wm-key-red"></span> India, the emphasis
+    </p>
+  </div>
+</section>
+
+<style is:global>
+  .wm-section .wrap { max-width: 80rem; }
+  .wm-head { margin-top: 1.5rem; }
+  .wm-head h2 { color: var(--color-penn-blue); margin-top: 0.75rem; }
+  .wm-intro { margin-top: 1.25rem; color: var(--color-ink-soft); }
+  .wm-intro em { font-style: italic; color: var(--color-penn-red); }
+
+  .wm-island { margin-top: clamp(2rem, 5vh, 3.5rem); position: relative; }
+  .wm-wrap { position: relative; width: 100%; }
+  .wm-svg { width: 100%; height: auto; display: block; }
+
+  .wm-tip {
+    position: absolute;
+    transform: translate(-50%, calc(-100% - 14px));
+    background: var(--color-penn-blue);
+    color: var(--color-canvas);
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    width: max-content;
+    max-width: 16rem;
+    pointer-events: none;
+    z-index: 5;
+    box-shadow: 0 12px 28px -14px rgba(1, 31, 91, 0.7);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .wm-tip strong { font-size: 0.92rem; }
+  .wm-tip span { font-size: 0.8rem; line-height: 1.4; color: rgba(250, 247, 242, 0.8); }
+  .wm-tip::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -5px;
+    transform: translateX(-50%) rotate(45deg);
+    width: 10px;
+    height: 10px;
+    background: var(--color-penn-blue);
+  }
+
+  .wm-caption {
+    margin-top: 1.75rem;
+    font-size: 0.9rem;
+    color: var(--color-ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .wm-key { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
+  .wm-key-blue { background: var(--color-penn-blue); }
+  .wm-key-red { background: var(--color-penn-red); margin-left: 1.25rem; }
+
+  /* country list: hidden on desktop (map carries it), shown on mobile */
+  .wm-list {
+    margin-top: 2rem;
+    display: none;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .wm-list li {
+    border-left: 2px solid var(--color-line);
+    padding-left: 0.85rem;
+  }
+  .wm-list li.is-emphasis { border-left-color: var(--color-penn-red); }
+  .wm-list-name { display: block; font-weight: 600; color: var(--color-penn-blue); font-size: 0.95rem; }
+  .wm-list-note { display: block; font-size: 0.86rem; color: var(--color-ink-soft); line-height: 1.4; }
+
+  @media (max-width: 640px) {
+    .wm-svg { display: none; }
+    .wm-tip { display: none; }
+    .wm-list { display: flex; }
+  }
+</style>

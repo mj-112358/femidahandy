@@ -1,0 +1,40 @@
+---
+import { ideas } from '../lib/content';
+---
+
+<section id="ideas" class="ideas" aria-labelledby="ideas-title">
+  <div class="ideas-pin">
+    <div class="wrap">
+      <div class="ideas-header">
+        <div>
+          <p class="eyebrow">03 · Big ideas</p>
+          <h2 id="ideas-title" class="font-display">Five readings from the research.</h2>
+        </div>
+        <div class="ideas-progress" aria-hidden="true">
+          {ideas.map((_, index) => <span class="ip-dot" data-dot={index}></span>)}
+        </div>
+      </div>
+
+      <div class="ideas-stage">
+        <div class="ideas-beats">
+          {ideas.map((idea, index) => (
+            <article class="beat" data-beat={index} data-year={idea.year}>
+              <p class="beat-index">Idea {idea.index}</p>
+              <p class="beat-year font-display">{idea.year}</p>
+              <h3 class="font-display">{idea.title}</h3>
+              <p class="beat-body">{idea.body}</p>
+              <p class="beat-note">{idea.note}</p>
+            </article>
+          ))}
+        </div>
+        <!-- Reserved area: the persistent dial advances through the years here. -->
+        <div class="ideas-dial-slot" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initBigIdeas } from '../scripts/big-ideas';
+  initBigIdeas();
+</script>

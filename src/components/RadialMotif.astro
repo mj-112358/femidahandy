@@ -1,0 +1,41 @@
+---
+interface Props {
+  variant?: 'dial' | 'orbit' | 'network' | 'rosette' | 'garden';
+  class?: string;
+}
+
+const { variant = 'orbit', class: className = '' } = Astro.props;
+const count = variant === 'garden' ? 8 : variant === 'rosette' ? 6 : 4;
+---
+
+<svg class:list={['radial-motif', `radial-${variant}`, className]} viewBox="0 0 400 400" fill="none" aria-hidden="true">
+  <circle cx="200" cy="200" r="118" class="motif-ring motif-ring-outer" />
+  <circle cx="200" cy="200" r="73" class="motif-ring motif-ring-inner" />
+  {
+    Array.from({ length: 24 }, (_, i) => {
+      const angle = (i / 24) * Math.PI * 2;
+      const x1 = 200 + Math.cos(angle) * 126;
+      const y1 = 200 + Math.sin(angle) * 126;
+      const x2 = 200 + Math.cos(angle) * (i % 3 === 0 ? 143 : 136);
+      const y2 = 200 + Math.sin(angle) * (i % 3 === 0 ? 143 : 136);
+      return <line x1={x1} y1={y1} x2={x2} y2={y2} class="motif-tick" />;
+    })
+  }
+  {
+    Array.from({ length: count }, (_, i) => {
+      const angle = (i / count) * Math.PI * 2 - Math.PI / 2;
+      const endX = 200 + Math.cos(angle) * (variant === 'garden' ? 154 : 118);
+      const endY = 200 + Math.sin(angle) * (variant === 'garden' ? 154 : 118);
+      const bend = i % 2 === 0 ? 18 : -18;
+      const controlX = 200 + Math.cos(angle + 0.4) * 72 + bend;
+      const controlY = 200 + Math.sin(angle + 0.4) * 72 - bend;
+      return (
+        <g>
+          <path d={`M200 200 Q ${controlX} ${controlY} ${endX} ${endY}`} class="motif-branch" />
+          <circle cx={endX} cy={endY} r={i === 1 ? 5 : 3.5} class:list={['motif-node', { 'motif-node-accent': i === 1 }]} />
+        </g>
+      );
+    })
+  }
+  <circle cx="200" cy="200" r="7" class="motif-core" />
+</svg>

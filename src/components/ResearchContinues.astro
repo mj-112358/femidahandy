@@ -1,0 +1,33 @@
+---
+// The persistent dial performs its final transformation into the left column
+// here (driven by scripts/dial.ts). No separate radial, no separate footer —
+// this is the terminal frame of the document.
+const year = new Date().getFullYear();
+---
+
+<section id="continue" class="research-continues" aria-labelledby="continue-title">
+  <div class="continue-inner">
+    <div class="wrap continue-grid">
+      <div class="continue-field" aria-hidden="true">
+        <!-- Reserved space; the persistent dial settles here as the final visual. -->
+      </div>
+      <div class="continue-copy" data-reveal-group>
+        <p class="eyebrow reveal">Current work and future questions</p>
+        <h2 id="continue-title" class="t-section font-display reveal">Research continues.</h2>
+        <p class="reveal">Current work, publications, teaching, and collaboration remain connected to the same eight research areas.</p>
+        <nav class="continue-links reveal" aria-label="Research links">
+          <a href="#publications">Selected publications</a>
+          <a href="/assets/femida-handy-cv.pdf" target="_blank" rel="noopener">Full CV</a>
+          <a href="https://orcid.org/0000-0003-3200-8042" target="_blank" rel="noopener">ORCID</a>
+          <a href="https://sp2.upenn.edu/person/femida-handy/" target="_blank" rel="noopener">Penn SP2 profile</a>
+        </nav>
+        <a class="continue-email reveal" href="mailto:fhandy@upenn.edu">fhandy@upenn.edu</a>
+      </div>
+    </div>
+
+    <div class="wrap continue-admin">
+      <p>Femida Handy · University of Pennsylvania, School of Social Policy &amp; Practice</p>
+      <p>© {year} Femida Handy</p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,65 @@
+---
+// Persistent lock dial — a single SVG instance. Position, scale, rotation,
+// and opacity are driven from one central controller (scripts/dial.ts) via
+// CSS custom properties, so there is exactly one dial across the whole page.
+const ticks = Array.from({ length: 60 }, (_, i) => i);
+const C = 100;
+const polar = (radius: number, index: number) => {
+  const angle = (index / 60) * Math.PI * 2;
+  return {
+    x: C + Math.sin(angle) * radius,
+    y: C - Math.cos(angle) * radius,
+  };
+};
+---
+
+<div class="dial" id="dial" data-dial aria-hidden="true">
+  <div class="dial-mech">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="dial-body" cx="38%" cy="32%" r="78%">
+          <stop offset="0%" stop-color="#2c4d80" />
+          <stop offset="55%" stop-color="#18345f" />
+          <stop offset="100%" stop-color="#0a2148" />
+        </radialGradient>
+      </defs>
+      <circle cx="100" cy="100" r="95" fill="url(#dial-body)" />
+      <circle cx="100" cy="100" r="90" fill="none" stroke="#0b2145" stroke-width="6" />
+      <circle cx="100" cy="100" r="82" fill="#5d729b" />
+      {
+        ticks.map((i) => {
+          const long = i % 5 === 0;
+          const inner = polar(long ? 69 : 73, i);
+          const outer = polar(80, i);
+          return (
+            <line
+              x1={inner.x}
+              y1={inner.y}
+              x2={outer.x}
+              y2={outer.y}
+              stroke="#16315c"
+              stroke-width={long ? 2 : 1.1}
+              stroke-linecap="round"
+            />
+          );
+        })
+      }
+      <circle cx="100" cy="100" r="60" fill="#faf7f2" />
+      <circle cx="100" cy="100" r="60" fill="none" stroke="#d9cdb6" stroke-width="1" />
+      <circle cx="100" cy="100" r="27" fill="#0b2145" />
+      <circle cx="100" cy="100" r="27" fill="none" stroke="#244a85" stroke-width="1.5" />
+    </svg>
+  </div>
+
+  <svg class="dial-face" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <text
+      class="dial-readout"
+      x="100"
+      y="100"
+      text-anchor="middle"
+      dominant-baseline="central"
+      data-dial-readout>00</text>
+  </svg>
+
+  <span class="dial-pointer" aria-hidden="true"></span>
+</div>

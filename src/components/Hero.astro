@@ -1,0 +1,48 @@
+---
+import { Image } from 'astro:assets';
+import portrait from '../assets/portrait.png';
+---
+
+<header id="hero" class="hero">
+  <div class="hero-opening" aria-hidden="true">
+    <span class="hero-opening-label">A research instrument</span>
+  </div>
+
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow hero-kicker">University of Pennsylvania · School of Social Policy &amp; Practice</p>
+      <h1 class="t-hero font-display">Femida Handy</h1>
+      <p class="hero-focus">
+        Research on philanthropy, volunteering, nonprofit organizations, and civic participation.
+      </p>
+      <p class="hero-summary">
+        Her work uses economic analysis, validated measurement, and cross-national research to examine why people give, why they volunteer, how nonprofit organizations operate, and how these patterns differ across institutions and countries.
+      </p>
+      <div class="hero-actions">
+        <a href="#mindmap" class="button button-primary">Explore the research</a>
+        <a href="/assets/femida-handy-cv.pdf" class="text-link" target="_blank" rel="noopener">Full CV <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+
+    <figure class="hero-portrait">
+      <div class="portrait-ring" aria-hidden="true"></div>
+      <Image
+        src={portrait}
+        alt="Professor Femida Handy"
+        width={520}
+        widths={[320, 520, 760]}
+        sizes="(max-width: 760px) 46vw, 23rem"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <figcaption>
+        Professor, School of Social Policy &amp; Practice
+      </figcaption>
+    </figure>
+  </div>
+
+  <a href="#question" class="hero-scroll" aria-label="Scroll to begin">
+    <span>Scroll to begin</span>
+    <i aria-hidden="true"></i>
+  </a>
+</header>

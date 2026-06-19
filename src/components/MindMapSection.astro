@@ -1,0 +1,23 @@
+---
+import { MindMap } from './MindMap';
+---
+
+<section id="mindmap" class="section research-section" aria-labelledby="research-title">
+  <div class="wrap">
+    <div class="section-index reveal">
+      <span>02</span><i aria-hidden="true"></i><span>Research map</span>
+    </div>
+    <div class="research-heading" data-reveal-group>
+      <div>
+        <p class="eyebrow reveal">One body of work</p>
+        <h2 id="research-title" class="t-section font-display reveal">Eight connected research areas.</h2>
+      </div>
+      <p class="reveal">
+        Select an area to rotate the system and open its publications. The relationships are organized around a common question: how giving and nonprofit action work across people, institutions, and places.
+      </p>
+    </div>
+    <div class="research-island reveal">
+      <MindMap client:visible />
+    </div>
+  </div>
+</section>
