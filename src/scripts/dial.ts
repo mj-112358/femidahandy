@@ -37,19 +37,21 @@ const SECTION_ORDER = [
 ] as const;
 
 // Declarative per-section anchors (desktop).
+// Dial is prominent only at: hero entrance, Big Ideas (element-anchored), Research Continues.
+// All other sections: tiny top-right corner accent, barely visible.
 const ANCHORS: Record<string, Anchor> = {
-  hero: { fx: 0, fy: -0.02, scale: 1.0, opacity: 1, readout: '00' },
-  heroRest: { fx: 0.36, fy: -0.36, scale: 0.34, opacity: 0.92, readout: '00' },
-  question: { fx: 0.35, fy: -0.27, scale: 0.3, opacity: 0.55, readout: 'WHY' },
-  mindmap: { fx: 0.4, fy: -0.27, scale: 0.26, opacity: 0.32, readout: '08' },
-  ideas: { fx: 0.3, fy: 0.0, scale: 0.46, opacity: 0.96, readout: '1995' },
-  map: { fx: 0.4, fy: 0.3, scale: 0.2, opacity: 0.48, readout: '13' },
-  wellbeing: { fx: 0.4, fy: -0.28, scale: 0.2, opacity: 0.4, readout: 'WELL' },
-  beyond: { fx: 0.42, fy: -0.28, scale: 0.18, opacity: 0.32, readout: 'MORE' },
-  shelf: { fx: 0.4, fy: -0.3, scale: 0.22, opacity: 0.46, readout: '09' },
-  recognition: { fx: 0.42, fy: -0.28, scale: 0.18, opacity: 0.3, readout: 'NVSQ' },
-  publications: { fx: 0.42, fy: -0.28, scale: 0.18, opacity: 0.28, readout: '100+' },
-  continue: { fx: -0.26, fy: 0.0, scale: 0.62, opacity: 1, readout: 'NEXT' },
+  hero:         { fx: 0,     fy: -0.02, scale: 1.0,  opacity: 1,    readout: '00'   },
+  heroRest:     { fx: 0.43,  fy: -0.43, scale: 0.12, opacity: 0.18, readout: '00'   },
+  question:     { fx: 0.43,  fy: -0.43, scale: 0.10, opacity: 0.13, readout: 'WHY'  },
+  mindmap:      { fx: 0.43,  fy: -0.43, scale: 0.10, opacity: 0.11, readout: '08'   },
+  ideas:        { fx: 0.3,   fy: 0.0,   scale: 0.46, opacity: 0.96, readout: '1995' },
+  map:          { fx: 0.43,  fy: -0.43, scale: 0.10, opacity: 0.11, readout: '13'   },
+  wellbeing:    { fx: 0.43,  fy: -0.43, scale: 0.10, opacity: 0.10, readout: 'WELL' },
+  beyond:       { fx: 0.43,  fy: -0.43, scale: 0.10, opacity: 0.10, readout: 'MORE' },
+  shelf:        { fx: 0.43,  fy: -0.43, scale: 0.10, opacity: 0.10, readout: '09'   },
+  recognition:  { fx: 0.43,  fy: -0.43, scale: 0.09, opacity: 0.09, readout: 'NVSQ' },
+  publications: { fx: 0.43,  fy: -0.43, scale: 0.09, opacity: 0.09, readout: '100+' },
+  continue:     { fx: -0.26, fy: 0.0,   scale: 0.62, opacity: 1,    readout: 'NEXT' },
 };
 
 export function initDial() {
