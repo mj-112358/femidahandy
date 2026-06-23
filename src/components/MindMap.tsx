@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
+import { createPortal } from 'react-dom';
 import { CLUSTERS } from '../lib/clusters';
 
 function useMobile() {
@@ -13,13 +14,13 @@ function useMobile() {
   return mobile;
 }
 
-function ClusterContent({ index, close, move }: { index: number; close: () => void; move: (direction: number) => void }) {
+function ClusterContent({ index, close, move, modal = false }: { index: number; close: () => void; move: (direction: number) => void; modal?: boolean }) {
   const cluster = CLUSTERS[index];
   return (
     <article
       className="orbit-panel"
       role="dialog"
-      aria-modal="false"
+      aria-modal={modal}
       aria-labelledby={`cluster-${cluster.id}`}
     >
       <button className="orbit-close" onClick={close} aria-label="Close research cluster">Close</button>
@@ -48,15 +49,34 @@ function ClusterContent({ index, close, move }: { index: number; close: () => vo
 function DesktopOrbit() {
   const [active, setActive] = useState<number | null>(null);
   const [hovered, setHovered] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const [origin, setOrigin] = useState({ x: 0, y: 0 });
   const dragStart = useRef<number | null>(null);
   const selected = active ?? 0;
   const rotation = active === null ? 0 : -selected * 45 - 45;
 
+  useEffect(() => setMounted(true), []);
+
   const move = useCallback((direction: number) => {
+    setOrigin({ x: 0, y: 0 });
     setActive((current) => {
       const base = current ?? 0;
       return (base + direction + CLUSTERS.length) % CLUSTERS.length;
     });
+  }, []);
+
+  const openCluster = useCallback((index: number, node: HTMLElement) => {
+    const rect = node.getBoundingClientRect();
+    const nav = document.getElementById('site-nav')?.getBoundingClientRect();
+    const navBottom = nav ? Math.max(nav.bottom, 0) : 0;
+    const usableCenterX = window.innerWidth / 2;
+    const usableCenterY = navBottom + (window.innerHeight - navBottom) / 2;
+
+    setOrigin({
+      x: rect.left + rect.width / 2 - usableCenterX,
+      y: rect.top + rect.height / 2 - usableCenterY,
+    });
+    setActive(index);
   }, []);
 
   useEffect(() => {
@@ -78,9 +98,15 @@ function DesktopOrbit() {
     };
   }, [active]);
 
+  const preview = active === null && hovered !== null ? CLUSTERS[hovered] : null;
+  const overlayStyle = {
+    '--orbit-origin-x': `${origin.x}px`,
+    '--orbit-origin-y': `${origin.y}px`,
+  } as CSSProperties;
+
   return (
     <div
-      className={`orbit-stage ${active !== null ? 'has-active' : ''}`}
+      className={`research-orbit ${active !== null ? 'has-active' : ''}`}
       onPointerDown={(event) => { dragStart.current = event.clientX; }}
       onPointerUp={(event) => {
         if (dragStart.current === null || active === null) return;
@@ -89,47 +115,54 @@ function DesktopOrbit() {
         dragStart.current = null;
       }}
     >
-      <div
-        className="orbit-system"
-        style={{
-          transform: `rotate(${rotation}deg) scale(${active === null ? 1 : 0.82})`,
-          opacity: active === null ? 1 : 0.34,
-        }}
-      >
-        <div className="orbit-rings" aria-hidden="true"><i></i><i></i><i></i></div>
-        {CLUSTERS.map((cluster, index) => {
-          const angle = index * 45 - 90;
-          return (
-            <button
-              key={cluster.id}
-              className="orbit-node"
-              style={{ transform: `rotate(${angle}deg) translateY(-15.5rem) rotate(${-angle}deg)` }}
-              onMouseEnter={() => setHovered(index)}
-              onMouseLeave={() => setHovered(null)}
-              onFocus={() => setHovered(index)}
-              onBlur={() => setHovered(null)}
-              onClick={() => setActive(index)}
-              aria-expanded={active === index}
-            >
-              <span className="orbit-node-number">{String(index + 1).padStart(2, '0')}</span>
-              <span className="orbit-node-label">{cluster.label}</span>
-            </button>
-          );
-        })}
-        <button className="orbit-hub" onClick={() => setActive(null)} aria-label="Reset research map">
-          <span className="font-display">8</span>
-          <small>research areas</small>
-        </button>
+      <div className="orbit-stage">
+        <div
+          className="orbit-system"
+          style={{
+            transform: `rotate(${rotation}deg) scale(${active === null ? 1 : 0.82})`,
+            opacity: active === null ? 1 : 0.34,
+          }}
+        >
+          <div className="orbit-rings" aria-hidden="true"><i></i><i></i><i></i></div>
+          {CLUSTERS.map((cluster, index) => {
+            const angle = index * 45 - 90;
+            return (
+              <button
+                key={cluster.id}
+                className="orbit-node"
+                style={{ transform: `rotate(${angle}deg) translateY(-15.5rem) rotate(${-angle}deg)` }}
+                onMouseEnter={() => setHovered(index)}
+                onMouseLeave={() => setHovered(null)}
+                onFocus={() => setHovered(index)}
+                onBlur={() => setHovered(null)}
+                onClick={(event) => openCluster(index, event.currentTarget)}
+                aria-expanded={active === index}
+              >
+                <span className="orbit-node-number">{String(index + 1).padStart(2, '0')}</span>
+                <span className="orbit-node-label">{cluster.label}</span>
+              </button>
+            );
+          })}
+          <button className="orbit-hub" onClick={() => setActive(null)} aria-label="Reset research map">
+            <span className="font-display">8</span>
+            <small>research areas</small>
+          </button>
+        </div>
       </div>
 
-      {active !== null && <ClusterContent key={CLUSTERS[active].id} index={active} close={() => setActive(null)} move={move} />}
-
-      {active === null && hovered !== null && (
-        <div className="orbit-preview" role="status">
-          <strong>{CLUSTERS[hovered].label}</strong>
-          <span>{CLUSTERS[hovered].blurb}</span>
-        </div>
+      {mounted && active !== null && createPortal(
+        <div className="research-focus-overlay" style={overlayStyle}>
+          <ClusterContent index={active} close={() => setActive(null)} move={move} modal />
+        </div>,
+        document.body,
       )}
+
+      <div className="orbit-preview-slot" role="status" aria-live="polite">
+        <div className={`orbit-preview ${preview ? 'is-visible' : ''}`}>
+          <strong className="orbit-preview-title">{preview?.label ?? 'Research area'}</strong>
+          <span className="orbit-preview-description">{preview?.blurb ?? 'Select or focus a research node to preview this area.'}</span>
+        </div>
+      </div>
     </div>
   );
 }

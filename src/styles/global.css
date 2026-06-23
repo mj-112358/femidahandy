@@ -207,6 +207,7 @@ body {
   --hero-progress: 1;
   --container: 78rem;
   --gutter: clamp(1.25rem, 5vw, 4.5rem);
+  --nav-height: 4.5rem;
 
   /* ---------------------------------------------------------------- */
   /*  One documented layering system. The persistent dial sits above  */
@@ -595,12 +596,16 @@ a { color: inherit; }
 .research-heading h2 { max-width: 14ch; margin-top: 1rem; }
 .research-heading > p { max-width: 38rem; font-size: 0.96rem; }
 .research-island { margin-top: 4rem; }
+.research-orbit {
+  position: relative;
+  touch-action: pan-y;
+}
 .orbit-stage {
   position: relative;
-  min-height: 49rem;
+  min-height: clamp(43rem, 58vw, 46rem);
   display: grid;
   place-items: center;
-  touch-action: pan-y;
+  padding-block: clamp(2rem, 4vw, 3.5rem) clamp(4.5rem, 6vw, 5.25rem);
 }
 .orbit-system {
   position: relative;
@@ -660,10 +665,13 @@ a { color: inherit; }
 }
 .orbit-hub span { font-size: 3rem; line-height: 1; }
 .orbit-hub small { font-size: 0.65rem; }
+.orbit-preview-slot {
+  min-height: 8.5rem;
+  display: grid;
+  place-items: start center;
+  margin-top: clamp(2rem, 3vw, 3rem);
+}
 .orbit-preview {
-  position: absolute;
-  bottom: 1rem;
-  left: 50%;
   width: min(28rem, 80%);
   display: flex;
   flex-direction: column;
@@ -671,27 +679,57 @@ a { color: inherit; }
   padding: 1rem 1.2rem;
   border-top: 1px solid rgba(250,247,242,0.25);
   text-align: center;
-  transform: translateX(-50%);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.35rem);
+  transition: opacity 220ms var(--ease-calm), visibility 220ms var(--ease-calm), transform 220ms var(--ease-calm);
 }
-.orbit-preview span { color: rgba(250,247,242,0.65); font-size: 0.8rem; }
+.orbit-preview.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+.orbit-preview-title,
+.orbit-preview-description {
+  display: block;
+}
+.orbit-preview-description { color: rgba(250,247,242,0.65); font-size: 0.8rem; }
+.research-focus-overlay {
+  position: fixed;
+  inset: var(--nav-height) 0 0;
+  z-index: var(--z-focus);
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 3vw, 3rem);
+  pointer-events: none;
+}
 .orbit-panel {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  z-index: 5;
-  width: min(54rem, 74%);
-  min-height: 36rem;
+  position: relative;
+  z-index: 1;
+  width: min(76vw, 73.75rem);
+  max-width: calc(100vw - clamp(2rem, 6vw, 6rem));
+  min-height: min(36rem, calc(100svh - var(--nav-height) - 2rem));
+  max-height: calc(100svh - var(--nav-height) - clamp(2rem, 6vw, 6rem));
+  overflow: auto;
+  overscroll-behavior: contain;
   padding: clamp(2rem, 5vw, 4rem);
   border: 1px solid rgba(250,247,242,0.22);
   background: #f8f3eb;
   color: var(--color-ink);
   box-shadow: 0 28px 80px rgba(0,0,0,0.22);
-  transform: translateY(-50%);
-  animation: panel-in 700ms var(--ease-calm);
+  pointer-events: auto;
+  animation: panel-in-centered 700ms var(--ease-calm) both;
 }
-@keyframes panel-in {
-  from { opacity: 0; transform: translate(2rem, -50%) scale(0.9); }
-  to { opacity: 1; transform: translate(0, -50%) scale(1); }
+@keyframes panel-in-centered {
+  from {
+    opacity: 0;
+    transform: translate(var(--orbit-origin-x, 0), var(--orbit-origin-y, 0)) scale(0.18);
+  }
+  62% { opacity: 1; }
+  to {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
 }
 .orbit-close {
   position: absolute;
@@ -1144,6 +1182,7 @@ a { color: inherit; }
   .stats { grid-template-columns: 1fr 1fr; }
   .stat { min-height: 10rem; }
   .research-heading { grid-template-columns: 1fr; gap: 1.5rem; }
+  .research-orbit { display: none; }
   .orbit-stage { display: none; }
   .orbit-mobile { display: block; }
   .orbit-mobile-track {
@@ -1165,7 +1204,7 @@ a { color: inherit; }
   }
   .orbit-mobile-track button.is-active { color: var(--color-penn-blue); background: var(--color-canvas); }
   .orbit-mobile-track span { display: block; margin-bottom: 0.4rem; color: #ff8a8a; font-size: 0.65rem; }
-  .orbit-mobile .orbit-panel { position: relative; inset: auto; width: 100%; min-height: 0; margin-top: 1rem; transform: none !important; }
+  .orbit-mobile .orbit-panel { position: relative; inset: auto; width: 100%; max-width: 100%; min-height: 0; max-height: none; margin-top: 1rem; overflow: visible; transform: none !important; animation: none; }
   .orbit-mobile .orbit-close { display: none; }
   .ideas-pin { align-items: flex-start; }
   .ideas-header { align-items: flex-start; flex-direction: column; }
